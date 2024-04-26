@@ -61,8 +61,17 @@ pip install -r requirements.txt
 
 
 ## Screenshots
-Home page
+###Home page
 ![image](https://github.com/kamalkushwaha1234/Wobot.ai_assignment/assets/131939203/bd700ae7-ef95-4207-acda-b3a112db407f)
+
+### To Create a To-Do-List 
+You have to fill the entery 
+![image](https://github.com/kamalkushwaha1234/Wobot.ai_assignment/assets/131939203/cbd7dece-c48a-4491-92f9-b17fb12b6203)
+### Hence ,To-Do-List created
+![image](https://github.com/kamalkushwaha1234/Wobot.ai_assignment/assets/131939203/4f7dd9e1-a06d-447f-8cb2-692178d86ff3)
+
+
+
 
 
 
