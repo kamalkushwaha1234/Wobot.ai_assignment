@@ -33,6 +33,11 @@ pip install -r requirements.txt
 ## JWT Token
 In this project we used  Customizing token claims for authentication  
 [https://django-rest-framework-simplejwt.readthedocs.io/en/latest/index.html#]
+
+## Requirements.txt
+```bash
+  
+```
 ## Project Flow
 
 | *Component*   | *Description*                                                                                             | *Connections*                                   |
