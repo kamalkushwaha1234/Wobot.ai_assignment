@@ -34,10 +34,7 @@ pip install -r requirements.txt
 In this project we used  Customizing token claims for authentication  
 [https://django-rest-framework-simplejwt.readthedocs.io/en/latest/index.html#]
 
-## Requirements.txt
-```bash
-  
-```
+
 ## Project Flow
 
 | *Component*   | *Description*                                                                                             | *Connections*                                   |
