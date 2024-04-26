@@ -29,6 +29,10 @@ pip install -r requirements.txt
 ```bash
   python manage.py runserver
 ```
+
+## JWT Token
+In this project we used  Customizing token claims for authentication  
+[https://django-rest-framework-simplejwt.readthedocs.io/en/latest/index.html#]
 ## Project Flow
 
 | *Component*   | *Description*                                                                                             | *Connections*                                   |
