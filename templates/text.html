@@ -10,12 +10,6 @@ from rest_framework.decorators import api_view,authentication_classes, permissio
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated,IsAdminUser
 from rest_framework.response import Response
-from rest_framework import status
-from django.contrib.auth.hashers import make_password
-from rest_framework.response import Response
-from rest_framework.decorators import renderer_classes
-from django.views.decorators.csrf import csrf_exempt
-
 
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer): 
@@ -25,20 +19,13 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         serializer =UserSerializerWithToken(self.user).data
         for k,v in serializer.items():
             data[k]= v
-        Shared_data(self.context['request'],data)
         return data
 
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
 
-def Shared_data(request,data):
-    shared_data=data
-    request.session['shared_data'] = shared_data
 
 
-
-
-@csrf_exempt
 def login_page(request):
     if request.method == "POST":
 
@@ -70,33 +57,79 @@ def login_page(request):
 
 
 @api_view(['POST'])
-def registerUser(request):
+def register_user(request):
     data=request.data
-    username = data.get('email')
-    print("from User_viwes user data " )
-    print(data)
+    print("from User_viwes user data " + data)
 
-    if User.objects.filter(username=username).exists():
-        return Response({'error': 'Username already taken'}, status=status.HTTP_400_BAD_REQUEST)
+    user =User.objects.filter(username=data['username'])
+
+    if user.exists():
+        messages={'message': "Username already taken!"}
+        return redirect('register')
     else :
         user =User.objects.create(
         first_name=data['first_name'],
         last_name=data['last_name'],
-        username=username,
+        username=data['email'],
         email=data['email'],
         password=make_password(data['password']))
         serializer=UserSerializerWithToken(user,many=False)
         print(serializer.data)
-        shared_data=serializer.data
-        request.session['shared_data']=shared_data
         return Response(serializer.data)
 
 
 
+
+
+@api_view(['POST'])
+def registerUser(request):
+    data = request.data
+    try : 
+        user =User.objects.create(
+        first_name=data['name'],
+        username=data['email'],
+        email=data['email'],
+        password=make_password(data['password']))
+        serializer=UserSerializerWithToken(user,many=False)
+        return Response(serializer.data)
+
+    except :
+        message={'detail':'User with this email already exists'}
+        return Response(message,status=status.HTTP_400_BAD_REQUEST)
+
         
 def register_page(request):
     
-    
+    if request.method == 'POST':
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        username = request.POST.get('email')
+        email=request.POST.get('email')
+        password = request.POST.get('password')
+
+        
+        user = User.objects.filter(username=username)
+
+        if user.exists():
+            
+            messages.info(request, "Username already taken!")
+            return redirect('register')
+
+        
+        user = User.objects.create_user(
+            first_name=first_name,
+            last_name=last_name,
+            username=email,
+        )
+
+        
+        user.set_password(password)
+        user.save()
+
+        
+        messages.info(request, "Account created Successfully!")
+        return redirect('home')
+
     
     return render(request, 'register.html')
 
@@ -115,7 +148,21 @@ def logout_user(request):
 
     return redirect('home')
 
+@api_view(['POST'])
+def registerUser(request):
+    data = request.data
+    try : 
+        user =User.objects.create(
+        first_name=data['name'],
+        username=data['email'],
+        email=data['email'],
+        password=make_password(data['password']))
+        serializer=UserSerializerWithToken(user,many=False)
+        return Response(serializer.data)
 
+    except :
+        message={'detail':'User with this email already exists'}
+        return Response(message,status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])

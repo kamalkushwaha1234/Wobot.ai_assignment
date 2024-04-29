@@ -7,12 +7,35 @@ from django.contrib.auth.models import User
 from api.models import ToDoItem
 from django.views.decorators.csrf import csrf_exempt
 
+
+
+
 @csrf_exempt
 def home(request):
-	todos=ToDoItem.objects.all()
-	if len(todos)==0:
-		todos={}
-	return render(request, 'home.html', {'todos':todos})
+    shared_data = request.session.get('shared_data', None)
+    if shared_data is not None :
+        print("my_token.exists")
+        print(shared_data)
+        todos = ToDoItem.objects.all()
+        if len(todos) == 0:
+            todos = {}
+        return render(request, 'home.html', {'todos': todos, 'shared_data': shared_data})
+    else:
+        print("notexists") 
+        print(shared_data)  # Properly indented
+        todos = ToDoItem.objects.all()
+        if len(todos) == 0:
+            todos = {}
+        return render(request, 'home.html', {'todos': todos})
+
+
+
+
+
+	
+	
+		
+	
 
 def create_todo(request):
 	if request.method == 'POST':

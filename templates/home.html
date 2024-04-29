@@ -22,11 +22,52 @@
     </style>
     <script>
       document.addEventListener("DOMContentLoaded", function() {
-        const profileLink = document.getElementById('profileLink');
+         document.getElementById('profileLink').addEventListener('click', function(e) {
+          e.preventDefault();
+
+        const token = localStorage.getItem('token');
+        const parsedToken = JSON.parse(token);
+        
+
+        fetch('/user/api/profile/', {
+					method: 'GET',
+					headers: {
+						'Content-Type': 'application/json',
+						'X-CSRFToken': '{{ csrf_token }}' ,
+            'Authorization' :  `Bearer ${parsedToken.access}`, 
+					},
+					
+				})
+				.then(response => {
+					if (!response.ok) {
+						throw new Error('Network response was not ok ' + response.statusText);
+					}
+					return response.json();
+				})
+				.then(data => {
+          console.log("ho gaya bhai")
+					window.location.href = '/user/profile/';
+					document.getElementById('profileLink').click();
+					
+					
+				})
+				.catch(error => {
+					console.error('Error:', error);
+				});
+      });
+				
+			
+
+
+   
+
+        //used to get profile withou hit the api
+        /*const profileLink = document.getElementById('profileLink');
         if (profileLink) {
             profileLink.addEventListener('click', function(event) {
                 event.preventDefault();
                 const token = localStorage.getItem('token');
+
                 if (token) {
                     window.location.href = this.href;  
                 } else {
@@ -35,7 +76,13 @@
             });
         } else {
             console.log('Profile link not found');
-        }
+        }*/
+
+
+
+
+
+
     
         const logoutLink = document.getElementById('logout_user');
         if (logoutLink) {
@@ -45,7 +92,13 @@
                 window.location.href = this.href; 
             });
         } 
-    });
+
+        const token = localStorage.getItem('token');
+        const parsedToken = JSON.parse(token);
+        const data = parsedToken.access; 
+        const name=parsedToken.name;
+        console.log(name)
+      });
     </script>
     
 </head>
@@ -63,10 +116,10 @@
                 </li>
 
 
-                {% if user.is_authenticated %}
+                {% if shared_data %}
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                      {{ user.username }}
+                      {{ shared_data.name }}  
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <li><a class="dropdown-item" id="profileLink" href="{% url 'profile_page' %}">Profile</a></li>

@@ -39,7 +39,7 @@
                 {% if user.is_authenticated %}
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                      {{ user.username }}
+                      {{ user.first_name }}
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <li><a class="dropdown-item" href="{% url 'profile_page' %}">Profile</a></li>
@@ -61,7 +61,7 @@
 </nav>
 <div class="container">
     <h1>User Profile</h1>
-    <p>Welcome, {{ user.username }}!</p>
+    <p>Welcome, {{ user.first_name }}!</p>
     <p>First Name: {{ user.first_name }}</p>
     <p>Last Name: {{ user.last_name }}</p>
     <p>Email: {{ user.email }}</p>
